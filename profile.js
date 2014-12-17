@@ -2,16 +2,8 @@
 //Solution: Use Node.js to connect to Treehouse's API to get profile information to print out
 var http = require("http");
 
-//Print out message
-function printMessage(topic, username, badgeCount, points) {
-  var message = username + " has " + badgeCount + " total badge(s) and " + points + " points in " + topic;
-  console.log(message);
-}
+var printer = require("./printer");
 
-//Print out error messages
-function printError(error){
-    console.error(error.message);
-}
 
 function get(topic, username){
   //Connect to the API URL (http://teamtreehouse.com/username.json)
@@ -27,20 +19,20 @@ function get(topic, username){
           //Parse the data
           var profile = JSON.parse(body);
           //Print the data
-          printMessage(topic, username, profile.badges.length, profile.points[topic]);
+          printer.printMessage(topic, username, profile.badges.length, profile.points[topic]);
         } catch(error) {
           //Parse Error
-          printError(error);
+          printer.printError(error);
         }
       } else {
         //Status Code Error
-        printError({message: "There was an error getting the profile for " + username + ". (" + http.STATUS_CODES[response.statusCode] + ")"});
+        printer.printError({message: "There was an error getting the profile for " + username + ". (" + http.STATUS_CODES[response.statusCode] + ")"});
       }
     });
   });
   
   //Connection Error
-  request.on("error", printError);
+  request.on("error", printer.printError);
 }
 
 
