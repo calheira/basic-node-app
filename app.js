@@ -1,3 +1,6 @@
 var profile = require("./profile");
-var users = process.argv.slice(2);
-users.forEach(profile.get);
+var topic = process.argv[2];
+var users = process.argv.slice(3);
+for (var i = 0; i < users.length; i++) {
+	profile.get(topic,users[i]);
+};
